@@ -27,11 +27,12 @@ init()
 	precacheshader( "line_horizontal" );
 	precacheshader( "line_vertical" );
 	precacheshader( "gradient_fadein" );
+	precacheShader( "difficulty_star" );
 	precachemenu( "coop_eog_summary" );
 	precachemenu( "coop_eog_summary2" );
 	precachemenu( "sp_eog_summary" );
 
-	level.maxRank = int( tableLookup( "sp/rankTable.csv", 0, "maxrank", 1 ) );
+	level.maxRank = int( tableLookup( "sp/ranktable.csv", 0, "maxrank", 1 ) );
 
 /*	for ( rId = 0; rId <= level.maxRank; rId++ )
 		precacheShader( tableLookup( "sp/rankIconTable.csv", 0, rId, 1 ) );*/
@@ -53,6 +54,8 @@ init()
 		rankName = tableLookup( "sp/ranktable.csv", 0, rankId, 1 );
 	}
 
+	//hud_score = get_hud_score();
+
 	thread xp_setup();
 	foreach ( player in level.players )
 		player thread xp_player_init();
@@ -63,22 +66,35 @@ xp_player_init()
 	if ( !isDefined( self.summary ) )
 	{
 		self.summary[ "summary" ] = [];
-		self.summary[ "summary" ][ "xp" ] = 0;
+		xp = 0;
+		rank = 0;
+
+		if(getDvar("player_1_xp") == "") {
+			setdvar( "player_1_xp", "0" );
+			self.summary[ "summary" ][ "xp" ] = 0;
+		} else {
+			xp = GetDvarInt("player_1_xp");
+			self.summary[ "summary" ][ "xp" ] = xp;
+		}
+		
+		setdvar( "player_2_xp", "0" );
+
+		if(getDvar("player_1_rank") == "") {
+			setdvar( "player_1_rank", "0" );
+			self.summary[ "rank" ] = 0;
+		} else {
+			rank = GetDvarInt("player_1_rank");
+			self.summary[ "rank" ] = rank;
+		}
+
+		setdvar( "player_2_rank", "0" );
+
+		//self.summary[ "summary" ][ "xp" ] = 0;
 		self.summary[ "summary" ][ "score" ] = 0;
 
 		self.summary[ "rankxp" ] = 0;
-		self.summary[ "rank" ] = 0;
+		//self.summary[ "rank" ] = 0;
 	}
-
-	if(getDvar("player_1_xp") == "")
-		setdvar( "player_1_xp", "0" );
-	
-	setdvar( "player_2_xp", "0" );
-
-	if(getDvar("player_1_rank") == "")
-		setdvar( "player_1_rank", "0" );
-
-	setdvar( "player_2_rank", "0" );
 
 	self.rankUpdateTotal = 0;
 	self.hud_rankscroreupdate = newclientHudElem( self );
@@ -93,6 +109,29 @@ xp_player_init()
 	self.hud_rankscroreupdate.archived = false;
 	self.hud_rankscroreupdate.color = ( 1, 1, 0.65 );
 	self.hud_rankscroreupdate fontPulseInit(3.0);
+
+	self.hud_score = newclientHudElem( self );
+    self.hud_score.foreground = true;
+	self.hud_score.x = 10;
+	self.hud_score.y = -50;
+	self.hud_score.alignX = "right";
+	self.hud_score.alignY = "bottom";
+	self.hud_score.horzAlign = "right";
+	self.hud_score.vertAlign = "bottom";
+	self.hud_score.score = 0;
+	self.hud_score.color = (1, 1, 0.65);
+	self.hud_score setText( "$ 0" );
+
+	self.hud_score.font = "hudbig";
+	self.hud_score.fontScale = 0.75;
+	self.hud_score.sort = 1;
+	self.hud_score.glowColor = ( 0, 0, 0 );
+	self.hud_score.glowAlpha = 0;
+	self.hud_score.alpha = 1;
+ 	self.hud_score.hidewheninmenu = true;
+
+	//self.hud_score setValue(1000);
+	self.hud_score SetPulseFX( 40, 2000, 600 );
 
 	// XP BAR
 	self.hud_xpbar = xp_bar_client_elem( self );
@@ -147,16 +186,21 @@ xpbar_update()
 
 get_xpbarwidth()
 {
+	player_num = "1";
+
 	if ( self == level.player )
 		player_num = "1";
-	else
-		player_num = "2";
 
-	rank_range = int( tableLookup( "sp/rankTable.csv", 0, getdvar( "player_" + player_num + "_rank" ), 3 ) );
-	rank_xp = int( getdvar( "player_" + player_num + "_xp" ) ) - int( tableLookup( "sp/rankTable.csv", 0, getdvar( "player_" + player_num + "_rank" ), 2 ) );
+	rank_range = int( tableLookup( "sp/ranktable.csv", 0, getdvar( "player_" + player_num + "_rank" ), 3 ) );
+	rank_xp = int( getdvar( "player_" + player_num + "_xp" ) ) - int( tableLookup( "sp/ranktable.csv", 0, getdvar( "player_" + player_num + "_rank" ), 2 ) );
+
+	//iPrintLn(rank_range);
+	//iPrintLn(rank_xp);
 
 	fullwidth = hud_width_format();
 	newwidth = int( fullwidth * ( rank_xp / rank_range ) );
+
+	iPrintLn(newwidth);
 
 	return newwidth;
 }
@@ -323,6 +367,8 @@ updatePlayerScore( type, value )
 	{
 		setdvar( "player_1_xp", self.summary[ "summary" ][ "xp" ] );
 		setdvar( "player_1_rank", self.summary[ "rank" ] );
+		self.hud_score setText( "$ " + getDvarInt("player_1_xp") );
+		self.hud_score SetPulseFX( 40, 2000, 600 );
 	}
 	else
 	{
@@ -445,10 +491,10 @@ updateRankAnnounceHUD()
 
 	// You've been promoted!
 	notifyData.titleText = &"RANK_PROMOTED";
+	notifyData.titleLabel = &"RANK_PROMOTED";
 	notifyData.iconName = self getRankInfoIcon( self.summary[ "rank" ] );
 	notifyData.sound = "sp_level_up";
 	notifyData.duration = 4.0;
-	notifyData.notifyTitle = "HELLO WORLD";
 
 	rank_char = level.rankTable[ self.summary[ "rank" ] ][ 1 ];
 	subRank = int( rank_char[ rank_char.size - 1 ] );
@@ -573,25 +619,49 @@ showNotifyMessage( notifyData )
 
 	if ( isDefined( notifyData.notifyText2 ) )
 	{
-			self.notifyText2 setParent( anchorElem );
+		if ( isSplitscreen() )
+			textSize = 0.667;
+		else
+			textSize = 1.0;
 
-			if ( isDefined( notifyData.text2Label ) )
-				self.notifyText2.label = notifyData.text2Label;
-			else
-				// string not found for 
-				self.notifyText2.label = &"";
+		self.notifyText2 = createFontString( "hudbig", textSize );
+		self.notifyText2 setParent( self.notifyTitle );
+		self.notifyText2 setPoint( "TOP", "TOP", 0, 0 );
+		self.notifyText2.glowColor = (0.2, 0.3, 0.7);
+		self.notifyText2.glowAlpha = 1;
+		self.notifyText2.hideWhenInMenu = true;
+		self.notifyText2.archived = false;
+		self.notifyText2.alpha = 0;
+		self.notifyText2 setParent( anchorElem );
 
-			self.notifyText2 setText( notifyData.notifyText2 );
-			self.notifyText2 setPulseFX( 100, int( duration * 1000 ), 1000 );
-			self.notifyText2.glowColor = glowColor;
-			self.notifyText2.alpha = 1;
-			anchorElem = self.notifyText2;
+		if ( isDefined( notifyData.text2Label ) )
+			self.notifyText2.label = notifyData.text2Label;
+		else
+			// string not found for 
+			self.notifyText2.label = &"";
+
+		self.notifyText2 setText( notifyData.notifyText2 );
+		self.notifyText2 setPulseFX( 100, int( duration * 1000 ), 1000 );
+		self.notifyText2.glowColor = glowColor;
+		self.notifyText2.alpha = 1;
+		anchorElem = self.notifyText2;
 	}
 
 	if ( isDefined( notifyData.iconName ) )
 	{
+		if ( isSplitscreen() )
+			iconSize = 46;
+		else
+			iconSize = 70;
+		iPrintLn(notifyData.iconName);
+		self.notifyIcon = createIcon( "black", iconSize, iconSize );
+		self.notifyIcon setParent( self.notifyText2 );
+		self.notifyIcon setPoint( "TOP", "TOP", 0, 30 );
+		self.notifyIcon.hideWhenInMenu = true;
+		self.notifyIcon.archived = false;
+		self.notifyIcon.alpha = 0;
 		self.notifyIcon setParent( anchorElem );
-		self.notifyIcon setShader( notifyData.iconName, 60, 60 );
+		self.notifyIcon setShader( "difficulty_star", 60, 60 );
 		self.notifyIcon.alpha = 0;
 		self.notifyIcon fadeOverTime( 1.0 );
 		self.notifyIcon.alpha = 1;
@@ -699,7 +769,7 @@ getRankInfoFull( rankId )
 
 getRankInfoIcon( rankId )
 {
-	return tableLookup( "sp/rankIconTable.csv", 0, rankId, 1 );
+	return tableLookup( "sp/rankicontable.csv", 0, rankId, 1 );
 }
 
 getRank()

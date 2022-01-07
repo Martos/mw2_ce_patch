@@ -30,7 +30,7 @@ setSkill( reset )
 		createTestHud(&"CAMPAIGN_ENHANCED_VERSION");
 		initPRXStuff();
 		
-		thread watchPRXAttach();
+		//thread watchPRXAttach();
 		
 
 		foreach ( player in level.players )
@@ -345,12 +345,14 @@ setSkill( reset )
 }
 
 watchPRXAttach() {
+/*
 	while(1) {
 		iPrintLn(GetDvar( "prx_attached" ));
 		iPrintLn(GetDvar("prx_current_xp"));
 		iPrintLn(GetDvar("prx_next_xp"));
 		wait(5);
 	}
+*/
 }
 
 scorePopup( amount, bonus, hudColor, glowAlpha )
