@@ -75,11 +75,6 @@ setSkill( reset )
 			player.hud_scorePopup.color = (0.5,0.5,0.5);
 			player.hud_scorePopup.sort = 10000;
 			player.hud_scorePopup fontPulseInit( 3.0 );
-			
-			xpbar = createXPBar(player, 224);
-			xpbar.bar.color = (1,1,0.5);
-			xpbar.bar.alpha = 0.75;
-			xpbar updateBar(0);
 
 			if ( !isDefined( player.baseIgnoreRandomBulletDamage ) )
 				player.baseIgnoreRandomBulletDamage = false;

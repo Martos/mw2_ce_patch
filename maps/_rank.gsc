@@ -112,15 +112,15 @@ xp_player_init()
 
 	self.hud_score = newclientHudElem( self );
     self.hud_score.foreground = true;
-	self.hud_score.x = 10;
-	self.hud_score.y = -50;
+	self.hud_score.x = 30;
+	self.hud_score.y = -60;
 	self.hud_score.alignX = "right";
 	self.hud_score.alignY = "bottom";
 	self.hud_score.horzAlign = "right";
 	self.hud_score.vertAlign = "bottom";
 	self.hud_score.score = 0;
 	self.hud_score.color = (1, 1, 0.65);
-	self.hud_score setText( "$ 0" );
+	self.hud_score setText( "$ " + GetDvarInt("player_1_xp"));
 
 	self.hud_score.font = "hudbig";
 	self.hud_score.fontScale = 0.75;
@@ -134,8 +134,14 @@ xp_player_init()
 	self.hud_score SetPulseFX( 40, 2000, 600 );
 
 	// XP BAR
-	self.hud_xpbar = xp_bar_client_elem( self );
-	self xpbar_update();
+	//self.hud_xpbar = xp_bar_client_elem( self );
+	//self xpbar_update();
+	if(getDvar("xpbar_enable") == "1") {
+		self.xpbar = createXPBar(self, 224);
+		self.xpbar.bar.color = (1,1,0.5);
+		self.xpbar.bar.alpha = 0.75;
+		self.xpbar updateBar(0);
+	}
 }
 
 xp_bar_client_elem( client )
@@ -207,10 +213,11 @@ get_xpbarwidth()
 
 xp_setup()
 {
-	level.xpScale = 1;
+	level.xpScale = 1 * GetDvarInt("g_gameskill");
+
 	if ( level.console )
 	{
-		level.xpScale = 1;// getDvarInt( "scr_xpscale" );
+		level.xpScale = 1 * GetDvarInt("g_gameskill");// getDvarInt( "scr_xpscale" );
 	}
 
 	registerScoreInfo( "kill", 10 );
