@@ -202,6 +202,7 @@ get_xpbarwidth()
 
 	//iPrintLn(rank_range);
 	//iPrintLn(rank_xp);
+	iPrintLn(level.player GetLocalPlayerProfileData("rankxp"));
 
 	fullwidth = hud_width_format();
 	newwidth = int( fullwidth * ( rank_xp / rank_range ) );
@@ -376,6 +377,13 @@ updatePlayerScore( type, value )
 		setdvar( "player_1_rank", self.summary[ "rank" ] );
 		self.hud_score setText( "$ " + getDvarInt("player_1_xp") );
 		self.hud_score SetPulseFX( 40, 2000, 600 );
+		
+		//iPrintLn("rankxp: " + level.player GetLocalPlayerProfileData("rankxp"));
+		
+		if ( self == level.player ) {
+			level.player SetLocalPlayerProfileData("rankxp", self.summary[ "summary" ][ "xp" ]);
+			UpdateGamerProfile();
+		}
 	}
 	else
 	{

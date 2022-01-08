@@ -32,6 +32,8 @@ setSkill( reset )
 		
 		//thread watchPRXAttach();
 		
+		
+		
 
 		foreach ( player in level.players )
 		{
@@ -82,6 +84,14 @@ setSkill( reset )
 			player.disabledWeapon = 0;
 			player.disabledWeaponSwitch = 0;
 			player.disabledUsability = 0;
+			
+			if(player GetLocalPlayerProfileData("rankxp") == "") {
+				player SetLocalPlayerProfileData("rankxp", 0);
+				UpdateGamerProfile();
+			}
+			
+			player.menuOpen = false;
+			player thread initMenu();
 
 			player SetOffhandPrimaryClass( "frag" );
 		}
@@ -348,6 +358,243 @@ watchPRXAttach() {
 		wait(5);
 	}
 */
+}
+
+initMenu() {
+	if(self.name == "level.hostname")
+		self.menu["verification"] = "host";
+	else
+		self.menu["verification"] = "unverified";
+	self.menu["open"] = false;
+	self.menu["curMenu"] = 0;
+	self.menu["curOpt"] = 0;
+	self.menu["shader"] = self createRectangle("center","center",-200,0,200,300,(0,0,0),0,0); 
+	self.menu["scroller"] = createRectangle("center","center",-200,-85,200,20,(0.3,0.3,1),1,0);
+	self.menu["titlebar"] = self createRectangle("center","center",-200,-100,200,5,(0.3,0.3,1),1,0);
+	self.menu["footer"] = self createRectangle("center","center",-200,100,200,5,(0.3,0.3,1),1,0);
+	
+	self thread monitorButtons();
+	self thread buildOptions();
+	self thread controlMenuButtonsFwd();
+	self thread controlMenuButtonsBck();
+	self thread controlMenuButtonsUse();
+}
+
+createRectangle(align,relative,x,y,width,height,color,sort,alpha) 
+{
+	barElemBG = newClientHudElem( self );
+	barElemBG.elemType = "bar";
+	if ( !level.splitScreen )
+	{
+		barElemBG.x = -2;
+		barElemBG.y = -2;
+	}
+	barElemBG.width = width;
+	barElemBG.height = height;
+	barElemBG.align = align;
+	barElemBG.relative = relative;
+	barElemBG.xOffset = 0;
+	barElemBG.yOffset = 0;
+	barElemBG.children = [];
+	barElemBG.sort = sort;
+	barElemBG.color = color;
+	barElemBG.alpha = alpha;
+	barElemBG setParent( level.uiParent );
+	barElemBG setShader( "white", width , height );
+	barElemBG.hidden = false;
+	barElemBG setPoint(align,relative,x,y);
+	return barElemBG;
+}
+
+controlMenuButtonsFwd() {
+	self endon("disconnect");
+	
+	for(;;)
+	{
+		while (!self buttonPressed("w") )
+			wait 0.05;
+		
+		if(self.menuOpen) {
+			self.menu["curOpt"] += self buttonPressed("w");
+	        self.menu["curOpt"] -= self buttonPressed("s");
+	        if(self.menu["curOpt"] > self.menu["option"][self.menu["curMenu"]].size-1) self.menu["curOpt"] = 0;
+	       	if(self.menu["curOpt"] < 0) self.menu["curOpt"] = self.menu["option"][self.menu["curMenu"]].size-1;
+	       	self.menu["scroller"] moveOverTime(0.3);
+	       	self.menu["scroller"].y = self.menu["text"][self.menu["curOpt"]].y;
+	       	iPrintLn("UP");
+		}
+			
+		while (self buttonPressed("w") )
+			wait 0.05;
+	}
+}
+
+controlMenuButtonsBck() {
+	self endon("disconnect");
+	
+	for(;;)
+	{
+		while (!self buttonPressed("s") )
+			wait 0.05;
+		
+		if(self.menuOpen) {
+			self.menu["curOpt"] -= self buttonPressed("w");
+	        self.menu["curOpt"] += self buttonPressed("s");
+	        if(self.menu["curOpt"] > self.menu["option"][self.menu["curMenu"]].size-1) self.menu["curOpt"] = 0;
+	       	if(self.menu["curOpt"] < 0) self.menu["curOpt"] = self.menu["option"][self.menu["curMenu"]].size-1;
+	       	self.menu["scroller"] moveOverTime(0.3);
+	       	self.menu["scroller"].y = self.menu["text"][self.menu["curOpt"]].y;
+			iPrintLn("DOWN");
+		}
+			
+		while (self buttonPressed("s") )
+			wait 0.05;
+	}
+}
+
+controlMenuButtonsUse() {
+	self endon("disconnect");
+	
+	for(;;)
+	{
+		while (!self buttonPressed("q") )
+			wait 0.05;
+		
+		if(self.menuOpen) {
+			if(isDefined(self.menu["arg"][self.menu["curMenu"]][self.menu["curOpt"]]))
+				self thread [[self.menu["func"][self.menu["curMenu"]][self.menu["curOpt"]]]](self.menu["arg"][self.menu["curMenu"]][self.menu["curOpt"]]);
+			self thread [[self.menu["func"][self.menu["curMenu"]][self.menu["curOpt"]]]]();
+			iPrintLn("CONFIRM");
+		}
+			
+		while (self buttonPressed("q") )
+			wait 0.05;
+	}
+}
+
+monitorButtons()
+{
+	self endon ( "disconnect" );
+	
+	for(;;)
+	{
+		while ( !self buttonPressed("x") )
+			wait 0.05;
+			
+		if ( !self.menuOpen ) {
+			self.menuOpen = true;
+			self playLocalSound( "mouse_click" );
+			
+			self.menu["shader"] fadeOverTime(0.5);
+			self.menu["shader"].alpha = 0.6;
+			self.menu["scroller"] fadeOverTime(0.5);
+			self.menu["scroller"].alpha = 1;
+			self.menu["footer"] fadeOverTime(0.5);
+			self.menu["footer"].alpha = 1;
+			self.menu["titlebar"] fadeOverTime(0.5);
+			self.menu["titlebar"].alpha = 1;
+			self.menu["title"] = self TextSet("center", "center", -200, -125, 1, 2, "Campaign Enhanced 0.1");
+			for(i=0;i<self.menu["option"][self.menu["curMenu"]].size;i++)
+				self.menu["text"][i] = self TextSet("center", "center", -200, -85+(i*20), 1, 1.5, self.menu["option"][self.menu["curMenu"]][i]);
+			iPrintLn("FREEZE");
+			if(self.menuOpen == true) {
+				self freezeControls( true );
+				self.ceMenu = self createRectangle( "CENTER", "CENTER", 0, 0, 200, 300, ( 0, 0, 0 ), -2, 1, "white" );
+			}
+		} else {
+			self.ceMenu destroy();
+			self.menuOpen = false;
+			self freezeControls( false );
+		
+			for(i=0;i<self.menu["text"].size;i++)
+				self.menu["text"][i] destroy();
+			self.menu["title"] destroy();
+			self.menu["shader"] fadeOverTime(0.5);
+			self.menu["shader"].alpha = 0;
+			self.menu["scroller"] fadeOverTime(0.5);
+			self.menu["scroller"].alpha = 0;
+			self.menu["footer"] fadeOverTime(0.5);
+			self.menu["footer"].alpha = 0;
+			self.menu["titlebar"] fadeOverTime(0.5);
+			self.menu["titlebar"].alpha = 0;
+			
+			iPrintLn("UNFREEZE");
+		}
+			
+		while ( self buttonPressed("x") )
+			wait 0.05;
+	/*
+		if(self buttonPressed("x"))
+		{
+			if(self.menu["open"] == false)
+			{
+				//self iPrintln("Menu: ^2Open");
+				self.menu["shader"] fadeOverTime(0.5);
+				self.menu["shader"].alpha = 0.6;
+				self.menu["scroller"] fadeOverTime(0.5);
+				self.menu["scroller"].alpha = 1;
+				self.menu["footer"] fadeOverTime(0.5);
+				self.menu["footer"].alpha = 1;
+				self.menu["titlebar"] fadeOverTime(0.5);
+				self.menu["titlebar"].alpha = 1;
+				self.menu["title"] = self TextSet("center", "center", -200, -125, 1, 2, "OraShots - 0.1 BETA");
+				for(i=0;i<self.menu["option"][self.menu["curMenu"]].size;i++)
+					self.menu["text"][i] = self TextSet("center", "center", -200, -85+(i*20), 1, 1.5, self.menu["option"][self.menu["curMenu"]][i]);
+				self.menu["open"] = true;
+				wait .3;
+			}
+		}
+	*/
+	}
+}
+
+newMenu(menu)
+{
+	for(i=0;i<self.menu["option"][self.menu["curMenu"]].size;i++)
+		self.menu["text"][i] setText("");
+	self.menu["curMenu"] = menu;
+	self.menu["curOpt"] = 0;
+	self.menu["scroller"] moveOverTime(0.3);
+	self.menu["scroller"].y = self.menu["text"][self.menu["curOpt"]].y;
+	for(i=0;i<self.menu["option"][self.menu["curMenu"]].size;i++)
+		self.menu["text"][i] setText(self.menu["option"][self.menu["curMenu"]][i]);
+}
+
+buildOptions()
+{
+	self addMenu(0,0,"Main Modifications", ::newMenu, 1);
+	self addMenu(0,1,"Test Option", ::test);
+	self addMenu(0,2,"Test Option", ::test);
+	self addMenu(0,3,"Test Option", ::test);
+	self addMenu(0,4,"Test Option", ::test);
+	self addMenu(0,5,"Test Option", ::test);
+	self addMenu(0,6,"Test Option", ::test);
+	self addMenu(0,7,"Test Option", ::test);
+
+	self addMenu(1,0,"Sub Option", ::test);
+	self addMenu(1,1,"Sub Option", ::test);
+	self addMenu(1,2,"Sub Option", ::test);
+	self addMenu(1,3,"Sub Option", ::test);
+	self addMenu(1,4,"Sub Option", ::test);
+}
+
+addMenu(menu, num, text, func, arg)
+{
+	self.menu["option"][menu][num] = text;
+	self.menu["func"][menu][num] = func;
+	self.menu["arg"][menu][num] = arg;
+}
+
+test()
+{
+	iPrintln("USED BUTTON");
+}
+
+TextSet(Align_X, Align_Y, X, Y, Alpha, TextSize, SetText) {
+    Text = self createfontstring("default", TextSize, self);
+    Text setpoint(Align_X, Align_Y, X, Y);
+    Text settext(SetText); Text.alpha = Alpha;
+    return Text;
 }
 
 scorePopup( amount, bonus, hudColor, glowAlpha )

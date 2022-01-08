@@ -146,6 +146,9 @@ main()
 		flags = GetArrayKeys( level.flag );
 		array_levelthread( flags, ::check_flag_for_stat_tracking );
 	}
+	
+	SetDvar("scr_damageFeedback", "1");
+	SetDvar("cg_fov", "90");
 
 	// disabled, prototyping PMC/COOP money
 	if ( GetDvar( "xp_enable", "0" ) == "" )
