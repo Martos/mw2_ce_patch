@@ -376,8 +376,7 @@ tryAutoSave( filename, description, image, timeout, doStealthChecks, suppress_pr
 	
 	//SCARICO I DVAR
 	iPrintLn("SAVING");
-	iPrintLn(GetDvar( "aa_player_kills" ));
-	PrintLn("CE Saving ...");
+	level.players[0] giveXp( "kill", 100*GetDvarInt("g_gameskill") + RandomInt(100*GetDvarInt("g_gameskill")));
 	
 	flag_clear( "game_saving" );
 	return true;

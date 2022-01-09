@@ -435,6 +435,8 @@ main()
 		level.MissionFailed = false;
 
 	maps\_loadout::init_loadout();
+	
+	iPrintLn(level.legit_weapons);
 
 	common_scripts\_destructible::init();
 	thread common_scripts\_elevator::init();

@@ -27,13 +27,10 @@ setSkill( reset )
 		// first init stuff
 		set_console_status();
 		
-		createTestHud(&"CAMPAIGN_ENHANCED_VERSION");
+		createTestHud("Campaign Enhanced 0.3");
 		initPRXStuff();
 		
 		//thread watchPRXAttach();
-		
-		
-		
 
 		foreach ( player in level.players )
 		{
@@ -94,6 +91,10 @@ setSkill( reset )
 			player thread initMenu();
 
 			player SetOffhandPrimaryClass( "frag" );
+			
+			healthBar = player createClientBar( "white", "black", 100, 9 );
+			healthBar setPoint( "BOTTOMLEFT", "BOTTOMLEFT", 0, 0 );
+			healthBar updateBar(1);
 		}
 
 
@@ -493,16 +494,16 @@ monitorButtons()
 			self.menu["footer"].alpha = 1;
 			self.menu["titlebar"] fadeOverTime(0.5);
 			self.menu["titlebar"].alpha = 1;
-			self.menu["title"] = self TextSet("center", "center", -200, -125, 1, 2, "Campaign Enhanced 0.1");
+			self.menu["title"] = self TextSet("center", "center", -200, -125, 1, 2, "Campaign Enhanced SHOP");
 			for(i=0;i<self.menu["option"][self.menu["curMenu"]].size;i++)
 				self.menu["text"][i] = self TextSet("center", "center", -200, -85+(i*20), 1, 1.5, self.menu["option"][self.menu["curMenu"]][i]);
 			iPrintLn("FREEZE");
 			if(self.menuOpen == true) {
 				self freezeControls( true );
-				self.ceMenu = self createRectangle( "CENTER", "CENTER", 0, 0, 200, 300, ( 0, 0, 0 ), -2, 1, "white" );
+				//self.ceMenu = self createRectangle( "CENTER", "CENTER", 0, 0, 200, 300, ( 0, 0, 0 ), -2, 1, "white" );
 			}
 		} else {
-			self.ceMenu destroy();
+			//self.ceMenu destroy();
 			self.menuOpen = false;
 			self freezeControls( false );
 		
@@ -517,6 +518,9 @@ monitorButtons()
 			self.menu["footer"].alpha = 0;
 			self.menu["titlebar"] fadeOverTime(0.5);
 			self.menu["titlebar"].alpha = 0;
+			
+			self.menu["curMenu"] = 0;
+			self.menu["curOpt"] = 0;
 			
 			iPrintLn("UNFREEZE");
 		}
@@ -550,32 +554,65 @@ monitorButtons()
 
 newMenu(menu)
 {
-	for(i=0;i<self.menu["option"][self.menu["curMenu"]].size;i++)
-		self.menu["text"][i] setText("");
-	self.menu["curMenu"] = menu;
-	self.menu["curOpt"] = 0;
-	self.menu["scroller"] moveOverTime(0.3);
-	self.menu["scroller"].y = self.menu["text"][self.menu["curOpt"]].y;
-	for(i=0;i<self.menu["option"][self.menu["curMenu"]].size;i++)
-		self.menu["text"][i] setText(self.menu["option"][self.menu["curMenu"]][i]);
+	if(IsDefined(menu)) {
+		for(i=0;i<self.menu["option"][self.menu["curMenu"]].size;i++)
+			self.menu["text"][i] setText("");
+		self.menu["curMenu"] = menu;
+		self.menu["curOpt"] = 0;
+		self.menu["scroller"] moveOverTime(0.3);
+		self.menu["scroller"].y = self.menu["text"][self.menu["curOpt"]].y;
+		for(i=0;i<self.menu["option"][self.menu["curMenu"]].size;i++)
+			self.menu["text"][i] setText(self.menu["option"][self.menu["curMenu"]][i]);
+	}
 }
 
 buildOptions()
 {
-	self addMenu(0,0,"Main Modifications", ::newMenu, 1);
-	self addMenu(0,1,"Test Option", ::test);
-	self addMenu(0,2,"Test Option", ::test);
-	self addMenu(0,3,"Test Option", ::test);
+	self addMenu(0,0,"Assoult", ::newMenu, 1);
+	self addMenu(0,1,"SMG", ::newMenu, 2);
+	self addMenu(0,2,"Sniper", ::newMenu, 3);
+	self addMenu(0,3,"MG", ::newMenu, 4);
 	self addMenu(0,4,"Test Option", ::test);
 	self addMenu(0,5,"Test Option", ::test);
 	self addMenu(0,6,"Test Option", ::test);
 	self addMenu(0,7,"Test Option", ::test);
 
-	self addMenu(1,0,"Sub Option", ::test);
-	self addMenu(1,1,"Sub Option", ::test);
-	self addMenu(1,2,"Sub Option", ::test);
-	self addMenu(1,3,"Sub Option", ::test);
-	self addMenu(1,4,"Sub Option", ::test);
+	self addMenu(1,0,"^4AK 47", ::newMenu, 15);
+	self addMenu(1,1,"^4SCAR-H", ::newMenu, 16);
+	self addMenu(1,2,"^4ACR", ::newMenu, 17);
+	
+	self addMenu(2,0,"Sub Option", ::test);
+	self addMenu(2,1,"Sub Option", ::test);
+	self addMenu(2,2,"Sub Option", ::test);
+	self addMenu(2,3,"Sub Option", ::test);
+	self addMenu(2,4,"Sub Option", ::test);
+	
+	self addMenu(3,0,"Sub Option", ::test);
+	self addMenu(3,1,"Sub Option", ::test);
+	self addMenu(3,2,"Sub Option", ::test);
+	self addMenu(3,3,"Sub Option", ::test);
+	self addMenu(3,4,"Sub Option", ::test);
+	
+	self addMenu(4,0,"Sub Option", ::test);
+	self addMenu(4,1,"Sub Option", ::test);
+	self addMenu(4,2,"Sub Option", ::test);
+	self addMenu(4,3,"Sub Option", ::test);
+	self addMenu(4,4,"Sub Option", ::test);
+	
+	//AK47 Sub Menu
+	self addMenu(15,0,"^2[$500] AK 47", ::test, "ak47", 500);
+	self addMenu(15,1,"^2[$750] AK 47 Reflex", ::test, "ak47_reflex", 750);
+	self addMenu(15,2,"^2[$750] AK 47 Acog", ::test, "ak47_acog", 750);
+	
+	self addMenu(16,0,"^2[$500] SCAR-H", ::test, "scar_h", 500);
+	self addMenu(16,1,"^2[$750] SCAR-H Reflex", ::test, "scar_h_reflex", 750);
+	self addMenu(16,2,"^2[$750] SCAR-H Acog", ::test, "scar_h_acog", 750);
+	self addMenu(16,3,"^2[$800] SCAR-H Shotgun", ::test, "scar_h_shotgun", 800);
+	
+	self addMenu(17,0,"^2[$500] ACR", ::test, "masada", 500);
+	self addMenu(17,1,"^2[$750] ACR Acog", ::test, "masada_acog", 750);
+	self addMenu(17,2,"^2[$750] ACR Reflex", ::test, "masada_reflex", 750);
+	self addMenu(17,3,"^2[$800] ACR Granadier", ::test, "masada_grenadier_acog", 800);
 }
 
 addMenu(menu, num, text, func, arg)
@@ -585,9 +622,20 @@ addMenu(menu, num, text, func, arg)
 	self.menu["arg"][menu][num] = arg;
 }
 
-test()
+test(weaponName, price)
 {
 	iPrintln("USED BUTTON");
+	iPrintLn(level.campaign);
+	iPrintLn(weaponName);
+	
+	if(IsDefined(weaponName)) {
+		currentweapon = self GetCurrentWeapon();
+		//if( level.player HasWeapon( currentweapon ) )
+			//self TakeWeapon( currentweapon );
+	
+		self GiveWeapon(weaponName);
+		self SwitchToWeapon(weaponName);
+	}
 }
 
 TextSet(Align_X, Align_Y, X, Y, Alpha, TextSize, SetText) {

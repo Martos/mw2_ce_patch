@@ -17818,12 +17818,17 @@ createTestHud(text) {
 	textelem = newHudElem();
 	textelem.x = 0;
 	textelem.y = 0;
-	textelem.alignX = "left";
+	textelem.alignX = "right";
 	textelem.alignY = "top";
-	textelem.horzAlign = "fullscreen";
-	textelem.vertAlign = "fullscreen";
+	textelem.horzAlign = "right";
+	textelem.vertAlign = "top";
+	textelem.font = "objective";
 	textelem setText(text);
 	textelem.alpha = 1;
+	textelem.glowColor = ( 0.2, 0.3, 0.7 );
+	textelem.glowAlpha = 1;
+	textelem.hideWhenInMenu = true;
+	textelem.archived = false;
 }
 
 initPRXStuff() {
