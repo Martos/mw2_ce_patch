@@ -130,7 +130,6 @@ main()
 	PreCacheShader( "fullscreen_dirt_left" );
 	PreCacheShader( "fullscreen_dirt_right" );
 
-
 	level.is_legacy_map = set_legacy_map();
 
 	level.ai_number = 0;
@@ -325,6 +324,21 @@ main()
 	PreCacheShader( "hud_destructibledeathicon" );
 	PreCacheShader( "hud_burningbarrelicon" );
 	PreCacheShader( "waypoint_ammo" );
+
+    PreCacheShader("480_xpbar");	
+	PreCacheShader("480_xpbar_empty");
+	PreCacheShader("480_xpbar_outlineglow");
+	
+	PreCacheShader("xpbar_xpfill");
+	PreCacheShader("xpbar_solidfill");
+	PreCacheShader("xpbar_stencilbase");
+
+	PreCacheShader("720_xpbar");
+	PreCacheShader("720_xpbar_empty");	
+	PreCacheShader("720_xpbar_outlineglow");
+	PreCacheShader("720_xpbar_solid");
+	
+	PreCacheShader("hud_scorebar");
 
 	level._effect[ "deathfx_bloodpool_generic" ] = LoadFX( "impacts/deathfx_bloodpool_generic" );
 	animscripts\pain::initPainFx();

@@ -413,15 +413,18 @@ createClientProgressBar( player, offset )
     return bar;
 }
 
-createClientBar( shader, bgshader, width, height, flashFrac )
+createClientBar( shader, bgshader, width, height, color, flashFrac )
 {
 	barElem = newClientHudElem( self );
-	barElem.x = 0 + 2;
-	barElem.y = 0 + 2;
+	barElem.x = 0;
+	barElem.y = 0;
 	barElem.frac = 0.25;
 	barElem.shader = shader;
 	barElem.sort = -1;
-	barElem setShader( shader, width - 2, height - 2 );
+	if ( isDefined( color ) ) {
+		barElem.color = color;
+	}
+	barElem setShader( shader, width, height );
 	if ( isDefined( flashFrac ) )
 	{
 		barElem.flashFrac = flashFrac;
@@ -438,7 +441,7 @@ createClientBar( shader, bgshader, width, height, flashFrac )
 	barElemBG.yOffset = 0;
 	barElemBG.bar = barElem;
 	barElemBG.children = [];
-	barElemBG.padding = 2;
+	barElemBG.padding = 1;
 	barElemBG.sort = -2;
 	barElemBG.alpha = 0.5;
 	barElemBG setParent( level.uiParent );

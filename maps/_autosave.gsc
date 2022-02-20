@@ -373,10 +373,31 @@ tryAutoSave( filename, description, image, timeout, doStealthChecks, suppress_pr
 
 		wait 0.25;
 	}
+
+	level.players[0].hud_xp_bonus = newclientHudElem( level.players[0] );
+	level.players[0].hud_xp_bonus.foreground = true;
+	level.players[0].hud_xp_bonus.x = 20;
+	level.players[0].hud_xp_bonus.y = 0;
+	level.players[0].hud_xp_bonus.alignX = "right";
+	level.players[0].hud_xp_bonus.alignY = "top";
+	level.players[0].hud_xp_bonus.horzAlign = "right";
+	level.players[0].hud_xp_bonus.vertAlign = "top";
+	level.players[0].hud_xp_bonus.color = (1, 1, 1);
+	level.players[0].hud_xp_bonus setText( "XP Bonus awarded");
+
+	level.players[0].hud_xp_bonus.font = "hudbig";
+	level.players[0].hud_xp_bonus.fontScale = 0.75;
+	level.players[0].hud_xp_bonus.sort = 1;
+	level.players[0].hud_xp_bonus.glowColor = ( 1, 1, 0.65 );
+	level.players[0].hud_xp_bonus.glowAlpha = 0;
+	level.players[0].hud_xp_bonus.alpha = 1;
+	level.players[0].hud_xp_bonus.hidewheninmenu = true;
 	
 	//SCARICO I DVAR
 	iPrintLn("SAVING");
 	level.players[0] giveXp( "kill", 100*GetDvarInt("g_gameskill") + RandomInt(100*GetDvarInt("g_gameskill")));
+
+	level.players[0].hud_xp_bonus SetPulseFX( 40, 2000, 600 );
 	
 	flag_clear( "game_saving" );
 	return true;

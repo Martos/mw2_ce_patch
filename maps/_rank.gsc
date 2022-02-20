@@ -55,10 +55,184 @@ init()
 	}
 
 	//hud_score = get_hud_score();
+	
+	setXpRanks();
 
 	thread xp_setup();
 	foreach ( player in level.players )
 		player thread xp_player_init();
+}
+
+setXpRanks()
+{
+	SetDvar("ce_def_min_rank_1", "0");
+	SetDvar("ce_def_max_rank_1", "1000");
+	SetDvar("ce_def_rank_1", "1000");
+	SetDvar("ce_def_min_rank_2", "1000");
+	SetDvar("ce_def_max_rank_2", "3400");
+	SetDvar("ce_def_rank_2", "2400");
+	SetDvar("ce_def_min_rank_3", "3400");
+	SetDvar("ce_def_max_rank_3", "9800");
+	SetDvar("ce_def_rank_3", "6400");
+	SetDvar("ce_def_min_rank_4", "9800");
+	SetDvar("ce_def_max_rank_4", "20200");
+	SetDvar("ce_def_rank_4", "10400");
+	SetDvar("ce_def_min_rank_5", "20200");
+	SetDvar("ce_def_max_rank_5", "34600");
+	SetDvar("ce_def_rank_5", "14400");
+	SetDvar("ce_def_min_rank_6", "34600");
+	SetDvar("ce_def_max_rank_6", "53000");
+	SetDvar("ce_def_rank_6", "18400");
+	SetDvar("ce_def_min_rank_7", "53000");
+	SetDvar("ce_def_max_rank_7", "75400");
+	SetDvar("ce_def_rank_7", "22400");
+	SetDvar("ce_def_min_rank_8", "75400");
+	SetDvar("ce_def_max_rank_8", "101800");
+	SetDvar("ce_def_rank_8", "26400");
+	SetDvar("ce_def_min_rank_9", "101800");
+	SetDvar("ce_def_max_rank_9", "132200");
+	SetDvar("ce_def_rank_9", "30400");
+	SetDvar("ce_def_min_rank_10", "132200");
+	SetDvar("ce_def_max_rank_10", "166600");
+	SetDvar("ce_def_rank_10", "34400");
+	SetDvar("ce_def_min_rank_11", "166600");
+	SetDvar("ce_def_max_rank_11", "205000");
+	SetDvar("ce_def_rank_11", "38400");
+	SetDvar("ce_def_min_rank_12", "205000");
+	SetDvar("ce_def_max_rank_12", "247400");
+	SetDvar("ce_def_rank_12", "42400");
+	SetDvar("ce_def_min_rank_13", "247400");
+	SetDvar("ce_def_max_rank_13", "293800");
+	SetDvar("ce_def_rank_13", "46400");
+	SetDvar("ce_def_min_rank_14", "293800");
+	SetDvar("ce_def_max_rank_14", "344200");
+	SetDvar("ce_def_rank_14", "50400");
+	SetDvar("ce_def_min_rank_15", "344200");
+	SetDvar("ce_def_max_rank_15", "398600");
+	SetDvar("ce_def_rank_15", "54400");
+	SetDvar("ce_def_min_rank_16", "398600");
+	SetDvar("ce_def_max_rank_16", "457000");
+	SetDvar("ce_def_rank_16", "58400");
+	SetDvar("ce_def_min_rank_17", "457000");
+	SetDvar("ce_def_max_rank_17", "519400");
+	SetDvar("ce_def_rank_17", "62400");
+	SetDvar("ce_def_min_rank_18", "519400");
+	SetDvar("ce_def_max_rank_18", "585800");
+	SetDvar("ce_def_rank_18", "66400");
+	SetDvar("ce_def_min_rank_19", "585800");
+	SetDvar("ce_def_max_rank_19", "656200");
+	SetDvar("ce_def_rank_19", "70400");
+	SetDvar("ce_def_min_rank_20", "656200");
+	SetDvar("ce_def_max_rank_20", "730600");
+	SetDvar("ce_def_rank_20", "74400");
+	SetDvar("ce_def_min_rank_21", "730600");
+	SetDvar("ce_def_max_rank_21", "809000");
+	SetDvar("ce_def_rank_21", "78400");
+	SetDvar("ce_def_min_rank_22", "809000");
+	SetDvar("ce_def_max_rank_22", "891400");
+	SetDvar("ce_def_rank_22", "82400");
+	SetDvar("ce_def_min_rank_23", "891400");
+	SetDvar("ce_def_max_rank_23", "977800");
+	SetDvar("ce_def_rank_23", "86400");
+	SetDvar("ce_def_min_rank_24", "977800");
+	SetDvar("ce_def_max_rank_24", "1068200");
+	SetDvar("ce_def_rank_24", "90400");
+	SetDvar("ce_def_min_rank_25", "1068200");
+	SetDvar("ce_def_max_rank_25", "1162600");
+	SetDvar("ce_def_rank_25", "94400");
+	SetDvar("ce_def_min_rank_26", "1162600");
+	SetDvar("ce_def_max_rank_26", "1261000");
+	SetDvar("ce_def_rank_26", "98400");
+	SetDvar("ce_def_min_rank_27", "1261000");
+	SetDvar("ce_def_max_rank_27", "1363400");
+	SetDvar("ce_def_rank_27", "102400");
+	SetDvar("ce_def_min_rank_28", "1363400");
+	SetDvar("ce_def_max_rank_28", "1469800");
+	SetDvar("ce_def_rank_28", "106400");
+	SetDvar("ce_def_min_rank_29", "1469800");
+	SetDvar("ce_def_max_rank_29", "1580200");
+	SetDvar("ce_def_rank_29", "110400");
+	SetDvar("ce_def_min_rank_30", "1580200");
+	SetDvar("ce_def_max_rank_30", "1694600");
+	SetDvar("ce_def_rank_30", "114400");
+	SetDvar("ce_def_min_rank_31", "1694600");
+	SetDvar("ce_def_max_rank_31", "1813000");
+	SetDvar("ce_def_rank_31", "118400");
+	SetDvar("ce_def_min_rank_32", "1813000");
+	SetDvar("ce_def_max_rank_32", "1935400");
+	SetDvar("ce_def_rank_32", "122400");
+	SetDvar("ce_def_min_rank_33", "1935400");
+	SetDvar("ce_def_max_rank_33", "2061800");
+	SetDvar("ce_def_rank_33", "126400");
+	SetDvar("ce_def_min_rank_34", "2061800");
+	SetDvar("ce_def_max_rank_34", "2192200");
+	SetDvar("ce_def_rank_34", "130400");
+	SetDvar("ce_def_min_rank_35", "2192200");
+	SetDvar("ce_def_max_rank_35", "2326600");
+	SetDvar("ce_def_rank_35", "134400");
+	SetDvar("ce_def_min_rank_36", "2326600");
+	SetDvar("ce_def_max_rank_36", "2465000");
+	SetDvar("ce_def_rank_36", "138400");
+	SetDvar("ce_def_min_rank_37", "2465000");
+	SetDvar("ce_def_max_rank_37", "2607400");
+	SetDvar("ce_def_rank_37", "142400");
+	SetDvar("ce_def_min_rank_38", "2607400");
+	SetDvar("ce_def_max_rank_38", "2753800");
+	SetDvar("ce_def_rank_38", "146400");
+	SetDvar("ce_def_min_rank_39", "2753800");
+	SetDvar("ce_def_max_rank_39", "2904200");
+	SetDvar("ce_def_rank_39", "150400");
+	SetDvar("ce_def_min_rank_40", "2904200");
+	SetDvar("ce_def_max_rank_40", "3058600");
+	SetDvar("ce_def_rank_40", "154400");
+	SetDvar("ce_def_min_rank_41", "3058600");
+	SetDvar("ce_def_max_rank_41", "3217000");
+	SetDvar("ce_def_rank_41", "158400");
+	SetDvar("ce_def_min_rank_42", "3217000");
+	SetDvar("ce_def_max_rank_42", "3379400");
+	SetDvar("ce_def_rank_42", "162400");
+	SetDvar("ce_def_min_rank_43", "3379400");
+	SetDvar("ce_def_max_rank_43", "3545800");
+	SetDvar("ce_def_rank_43", "166400");
+	SetDvar("ce_def_min_rank_44", "3545800");
+	SetDvar("ce_def_max_rank_44", "3716200");
+	SetDvar("ce_def_rank_44", "170400");
+	SetDvar("ce_def_min_rank_45", "3716200");
+	SetDvar("ce_def_max_rank_45", "3890600");
+	SetDvar("ce_def_rank_45", "174400");
+	SetDvar("ce_def_min_rank_46", "3890600");
+	SetDvar("ce_def_max_rank_46", "4069000");
+	SetDvar("ce_def_rank_46", "178400");
+	SetDvar("ce_def_min_rank_47", "4069000");
+	SetDvar("ce_def_max_rank_47", "4251400");
+	SetDvar("ce_def_rank_47", "182400");
+	SetDvar("ce_def_min_rank_48", "4251400");
+	SetDvar("ce_def_max_rank_48", "4437800");
+	SetDvar("ce_def_rank_48", "186400");
+	SetDvar("ce_def_min_rank_49", "4437800");
+	SetDvar("ce_def_max_rank_49", "4628200");
+	SetDvar("ce_def_rank_49", "190400");
+	SetDvar("ce_def_min_rank_50", "4628200");
+	SetDvar("ce_def_max_rank_50", "4822600");
+	SetDvar("ce_def_rank_50", "194400");
+	SetDvar("ce_def_min_rank_51", "4822600");
+	SetDvar("ce_def_max_rank_51", "5021000");
+	SetDvar("ce_def_rank_51", "198400");
+	SetDvar("ce_def_min_rank_52", "5021000");
+	SetDvar("ce_def_max_rank_52", "5223400");
+	SetDvar("ce_def_rank_52", "202400");
+	SetDvar("ce_def_min_rank_53", "5223400");
+	SetDvar("ce_def_max_rank_53", "5429800");
+	SetDvar("ce_def_rank_53", "206400");
+	SetDvar("ce_def_min_rank_54", "5429800");
+	SetDvar("ce_def_max_rank_54", "5640200");
+	SetDvar("ce_def_rank_54", "210400");
+	SetDvar("ce_def_min_rank_55", "5640200");
+	SetDvar("ce_def_max_rank_55", "5854600");
+	SetDvar("ce_def_rank_55", "214400");
+	SetDvar("ce_def_min_rank_56", "00");
+	SetDvar("ce_def_max_rank_56", "00");
+	SetDvar("ce_def_rank_56", "00");
 }
 
 xp_player_init()
@@ -142,6 +316,28 @@ xp_player_init()
 		self.xpbar.bar.alpha = 0.75;
 		self.xpbar updateBar(0);
 	}
+
+	self.hud_xp_warn = newclientHudElem( self );
+	self.hud_xp_warn.foreground = true;
+	self.hud_xp_warn.x = 20;
+	self.hud_xp_warn.y = 0;
+	self.hud_xp_warn.alignX = "right";
+	self.hud_xp_warn.alignY = "top";
+	self.hud_xp_warn.horzAlign = "right";
+	self.hud_xp_warn.vertAlign = "top";
+	self.hud_xp_warn.score = 0;
+	self.hud_xp_warn.color = (1, 1, 0.65);
+	self.hud_xp_warn setText( "XP ENABLED !");
+
+	self.hud_xp_warn.font = "hudbig";
+	self.hud_xp_warn.fontScale = 0.75;
+	self.hud_xp_warn.sort = 1;
+	self.hud_xp_warn.glowColor = ( 0, 1, 0 );
+	self.hud_xp_warn.glowAlpha = 0;
+	self.hud_xp_warn.alpha = 1;
+	self.hud_xp_warn.hidewheninmenu = true;
+
+	self.hud_xp_warn SetPulseFX( 40, 2000, 600 );
 }
 
 xp_bar_client_elem( client )
@@ -214,11 +410,11 @@ get_xpbarwidth()
 
 xp_setup()
 {
-	level.xpScale = 1 * GetDvarInt("g_gameskill");
+	level.xpScale = 10 * GetDvarInt("g_gameskill");
 
 	if ( level.console )
 	{
-		level.xpScale = 1 * GetDvarInt("g_gameskill");// getDvarInt( "scr_xpscale" );
+		level.xpScale = 10 * GetDvarInt("g_gameskill");// getDvarInt( "scr_xpscale" );
 	}
 
 	registerScoreInfo( "kill", 10 );
@@ -378,12 +574,37 @@ updatePlayerScore( type, value )
 		self.hud_score setText( "$ " + getDvarInt("player_1_xp") );
 		self.hud_score SetPulseFX( 40, 2000, 600 );
 		
-		//iPrintLn("rankxp: " + level.player GetLocalPlayerProfileData("rankxp"));
+		//player.xpBarWidth = ( ( ( player.rankXp - player.minXp ) / player.maxXp ) * 200  );
+		self.rankXp = getdvarint("player_1_xp");
+		self.rankLevel = getdvarint("ce_rank");
+		self.minXp = getdvarint("ce_def_min_rank_" + self.rankLevel);
+		self.maxXp = getdvarint("ce_def_rank_" + (self.rankLevel));
 		
-		if ( self == level.player ) {
-			level.player SetLocalPlayerProfileData("rankxp", self.summary[ "summary" ][ "xp" ]);
-			UpdateGamerProfile();
+		/*
+		iPrintLn("xp: " + self.rankXp);
+		iPrintLn("rank: " + self.rankLevel);
+		iPrintLn("minxp: " + self.minXp);
+		iPrintLn("maxxp: " + self.maxXp);
+		*/
+		
+		self.xpBarWidth = ( ( ( self.rankXp - self.minXp ) / self.maxXp ) * 1  );
+		
+		if((GetDvarInt("ce_def_min_rank_"+(self.rankLevel+1)) - GetDvarInt("player_1_xp")) <= 0) {
+			self.rankLevel++;
+	
+			SetDvar("ce_rank", self.rankLevel);
+			SetDvar("ce_next_rank", self.rankLevel+1);
+			
+			if(self.xpBarWidth >= 1) {
+				self.xpBarWidth = self.xpBarWidth - 1;
+			}
+	
+			self thread updateRankAnnounceHUD();
 		}
+		
+		self.centerXpBar updateBar(self.xpBarWidth);
+		
+		level.player SetLocalPlayerProfileData("rankxp", self.summary[ "summary" ][ "xp" ]);
 	}
 	else
 	{
@@ -391,12 +612,14 @@ updatePlayerScore( type, value )
 		setdvar( "player_2_rank", self.summary[ "rank" ] );
 	}
 
-	self xpbar_update();
+	//self xpbar_update();
 
 	self.rankUpdateTotal = 0;
 
+	/*
 	if ( self updateRank() )
 		self thread updateRankAnnounceHUD();
+	*/
 }
 
 fontPulseInit(maxFontScale)

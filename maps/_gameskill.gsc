@@ -27,7 +27,11 @@ setSkill( reset )
 		// first init stuff
 		set_console_status();
 		
-		createTestHud("Campaign Enhanced 0.3");
+		if(level.ps3)
+			createTestHud("Campaign Enhanced 0.3 PS3");
+		else
+			createTestHud("Campaign Enhanced 0.3");
+
 		initPRXStuff();
 		
 		//thread watchPRXAttach();
@@ -82,10 +86,14 @@ setSkill( reset )
 			player.disabledWeaponSwitch = 0;
 			player.disabledUsability = 0;
 			
+			player.xpBarWidth = 0;
+			
+			/*
 			if(player GetLocalPlayerProfileData("rankxp") == "") {
 				player SetLocalPlayerProfileData("rankxp", 0);
 				UpdateGamerProfile();
 			}
+			*/
 			
 			player.menuOpen = false;
 			player thread initMenu();
@@ -95,6 +103,18 @@ setSkill( reset )
 			healthBar = player createClientBar( "white", "black", 100, 9 );
 			healthBar setPoint( "BOTTOMLEFT", "BOTTOMLEFT", 0, 0 );
 			healthBar updateBar(1);
+			
+			player.rankLevel = getdvarint("ce_rank");
+			player.rankXp = getdvarint("player_1_xp");
+			player.minXp = getdvarint("ce_def_min_rank_" + player.rankLevel);
+			player.maxXp = getdvarint("ce_def_rank_" + (player.rankLevel));
+			
+			player.xpBarWidth = ( ( ( player.rankXp - player.minXp ) / player.maxXp ) );
+			
+			player.centerXpBar = player createClientBar( "gradient_fadein", "black", 250, 6, ( 1, 0.8, 0.4 ));
+			player.centerXpBar setPoint( "BOTTOMCENTER", "BOTTOMCENTER", 0, -35 );
+			player.centerXpBar updateBar(player.xpBarWidth);
+			
 		}
 
 
