@@ -100,9 +100,11 @@ setSkill( reset )
 
 			player SetOffhandPrimaryClass( "frag" );
 			
+			/*
 			healthBar = player createClientBar( "white", "black", 100, 9 );
 			healthBar setPoint( "BOTTOMLEFT", "BOTTOMLEFT", 0, 0 );
 			healthBar updateBar(1);
+			*/
 			
 			player.rankLevel = getdvarint("ce_rank");
 			player.rankXp = getdvarint("player_1_xp");
